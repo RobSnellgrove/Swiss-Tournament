@@ -42,17 +42,17 @@ def getSwissPairings():
 
     player1 = True # are we considering player1 or player2?
     for row in standingsList:
-      if(player1):
+      if(player1): #Is this row player1 or player2 of a game?
         playerOneId = row['id']
         playerOneName = row['name']
         player1 = False
       else:
         playerTwoId = row['id']
         playerTwoName = row['name']
-        thisTuple = ({'playerOneId':playerOneId,'playerOneName':playerOneName,'playerTwoId':playerTwoId,'playerTwoName':playerTwoName})
-        pairingsList.append(thisTuple)
-        player1 = True
-    return pairingsList
+        thisTuple = ({'playerOneId':playerOneId,'playerOneName':playerOneName,'playerTwoId':playerTwoId,'playerTwoName':playerTwoName}) # compile the tuple
+        pairingsList.append(thisTuple) # Add tuple to output list.
+        player1 = True # Set back to player1
+    return pairingsList #return the list
 
 
 
