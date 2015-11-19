@@ -52,7 +52,7 @@ table, th, td{
     <h2>Register new player</h2>
     <p>
     <form method=post action="/post">
-      <div><textarea id="content" name="content"></textarea></div>
+      <div><input type = "text" id="content" name="content"></textarea></div>
       <div><button id="go" type="submit">Register</button></div>
     </form>
   </div>
