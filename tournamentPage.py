@@ -25,6 +25,13 @@ HTML_WRAP = '''\
 th{
   text-align: left;
 }
+
+table, th, td{
+  border: 1px solid;
+  border-collapse:collapse;
+  padding: 5px
+}
+
 .section-box{
   width: 600px;
   display:inline-block;
@@ -50,19 +57,24 @@ th{
     <h2>List of registered players</h2>
     <table>
     <tr><th>ID</th><th>Name</th></tr>
-    %s
+    **players**
     </table>
   </div>
 </div>
 <div class = "row-div">
   <div class = "section-box">
     <h2>Next round</h2>
+    <table>
+    <tr><th colspan="2">Player 1</th><th colspan="2">Player 2</th></tr>
+    <tr><th>ID</th><th>Name</th><th>ID</th><th>Name</th></tr>
+    **pairings**
+    </table>
   </div>
   <div class = "section-box">
     <h2>Current rankings</h2>
     <table>
     <tr><th>ID</th><th>Name</th><th>Wins</th><th>Matches</th></tr>
-    %s
+    **standings**
     </table>
   </div>
 </div>
@@ -74,6 +86,10 @@ th{
 # HTML template for an individual comment
 PLAYER = '''\
     <tr><td>%(id)s</td><td>%(name)s</td></tr>
+'''
+
+PAIRING = '''\
+    <tr><td>%(playerOneId)s</td><td>%(playerOneName)s</td><td>%(playerTwoId)s</td><td>%(playerTwoName)s</td></tr>
 '''
 
 STANDING = '''\
@@ -88,11 +104,16 @@ def View(env, resp):
     '''
     # get posts from database
     players = tournamentdb.GetAllPlayers()
+    pairings = tournamentdb.getSwissPairings()
     standings = tournamentdb.getStandings()
     # send results
     headers = [('Content-type', 'text/html')]
     resp('200 OK', headers)
-    return [HTML_WRAP % (''.join(PLAYER % p for p in players),''.join(STANDING % q for q in standings))] #PLAYER % p for p in players, 
+    playerString = ''.join(PLAYER % p for p in players)
+    pairingString = ''.join(PAIRING % q for q in pairings)
+    standingString = ''.join(STANDING % p for p in standings)
+    newHTML = HTML_WRAP.replace('**players**', playerString).replace('**standings**',standingString).replace('**pairings**',pairingString)
+    return newHTML
     # The syntax s.join( seq ) where s='-'; and seq = ("a", "b", "c"); would return a-b-c
     # for q in standings is producing a sequence of rows from standings. STANDING % q is subbing each q into the template string STANDING
 
