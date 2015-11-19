@@ -33,8 +33,9 @@ table, th, td{
 }
 
 .section-box{
-  width: 600px;
   display:inline-block;
+  width: 40%;
+  margin: auto;
   font-family: arial;
   border: 1px solid;
   padding: 10px;
@@ -68,8 +69,8 @@ table, th, td{
   <div class = "section-box">
     <h2>Next round</h2>
     <table>
-    <tr><th colspan="2">Player 1</th><th colspan="2">Player 2</th></tr>
-    <tr><th>ID</th><th>Name</th><th>ID</th><th>Name</th></tr>
+    <tr><th colspan="2">Player 1</th><th colspan="2">Player 2</th><th colspan="2">Winner</th></tr>
+    <tr><th>ID</th><th>Name</th><th>ID</th><th>Name</th><th></th><th></th></tr>
     **pairings**
     </table>
   </div>
@@ -92,7 +93,7 @@ PLAYER = '''\
 '''
 
 PAIRING = '''\
-    <tr><td>%(playerOneId)s</td><td>%(playerOneName)s</td><td>%(playerTwoId)s</td><td>%(playerTwoName)s</td></tr>
+    <tr><td>%(playerOneId)s</td><td>%(playerOneName)s</td><td>%(playerTwoId)s</td><td>%(playerTwoName)s</td><td><button formaction="tournamentdb.reportMatch(%(playerOneId)s,%(playerTwoId)s)" type="submit">Player1</button></tr>
 '''
 
 STANDING = '''\

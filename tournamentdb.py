@@ -54,7 +54,19 @@ def getSwissPairings():
         player1 = True # Set back to player1
     return pairingsList #return the list
 
+def reportMatch(winner, loser):
+    """Records the outcome of a single match between two players.
 
+    Args:
+      winner:  the id number of the player who won
+      loser:  the id number of the player who lost
+    """
+ 
+    db = connect()
+    c = db.cursor()
+    c.execute("insert into matches (winner, loser) values (%s,%s)",(winner,loser))
+    db.commit()
+    db.close()
 
 
 
