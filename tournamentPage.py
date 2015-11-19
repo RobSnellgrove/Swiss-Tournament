@@ -53,7 +53,7 @@ table, th, td{
     <h2>Register new player</h2>
     <p>
     <form method=post action="/post">
-      <div><input type = "text" id="content" name="content"></textarea></div>
+      <div><input type = "text" id="content" name="newPlayer"></textarea></div>
       <div><button id="go" type="submit">Register</button></div>
     </form>
   </div>
@@ -104,7 +104,7 @@ STANDING = '''\
 def View(env, resp):
     '''View is the 'main page' of the forum.
 
-    It displays the submission form and the previously posted messages.
+    It displays the registration form and the outputs
     '''
     # get posts from database
     players = tournamentdb.GetAllPlayers()
@@ -135,7 +135,7 @@ def Post(env, resp):
     if length > 0:
         postdata = input.read(length)
         fields = cgi.parse_qs(postdata)
-        content = fields['content'][0]
+        content = fields['newPlayer'][0]
         # If the post is just whitespace, don't save it.
         content = content.strip()
         if content:
