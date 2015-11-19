@@ -73,7 +73,7 @@ table, th, td{
   <div class = "section-box">
     <h2>Current rankings</h2>
     <table>
-    <tr><th>ID</th><th>Name</th><th>Wins</th><th>Matches</th></tr>
+    <tr><th>ID</th><th>Name</th><th>Wins</th><th>Losses</th><th>Played</th></tr>
     **standings**
     </table>
   </div>
@@ -93,7 +93,7 @@ PAIRING = '''\
 '''
 
 STANDING = '''\
-    <tr><td>%(id)s</td><td>%(name)s</td><td>%(wins)s</td><td>%(matches)s</td></tr>
+    <tr><td>%(id)s</td><td>%(name)s</td><td>%(wins)s</td><td>%(losses)s</td><td>%(matches)s</td></tr>
 '''
 
 ## Request handler for main page

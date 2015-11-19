@@ -29,29 +29,15 @@ def GetAllPlayers():
 def getStandings():
     db = psycopg2.connect("dbname=tournament")
     c = db.cursor()
-    c.execute("select losses.lossesID as id, name, wins.noOfWins as wins, wins.noOfWins + noOfLosses as no_of_Matches from losses, wins, players where losses.lossesID = wins.winsID and players.id = losses.lossesID order by wins desc;");
+    c.execute("select losses.lossesID as id, name, wins.noOfWins as wins, losses.noOfLosses as losses, wins.noOfWins + noOfLosses as no_of_Matches from losses, wins, players where losses.lossesID = wins.winsID and players.id = losses.lossesID order by wins desc;");
     standings = [];
-    standings = ({'id': str(row[0]), 'name': str(row[1]), 'wins':str(row[2]), 'matches':str(row[3])}
+    standings = ({'id': str(row[0]), 'name': str(row[1]), 'wins':str(row[2]), 'losses':str(row[3]), 'matches':str(row[4])}
       for row in c.fetchall())
     db.close()
     return standings
 
 def getSwissPairings():
     standingsList = getStandings()
-    # pairingsList = []
-
-    # for i in range(0,len(standingsList)):
-    #     if(i%2 == 0):
-    #         thisTuple = ({'playerOneID':standingsList[i][0],'playerOneName':standingsList[i][1],'playerTwoId':standingsList[i+1][0],'playerTwoName':standingsList[i+1][1]})
-    #         pairingsList.append(thisTuple)
-    # return pairingsList
-
-    # works
-    # for row in standingsList:
-    #   firstRowId = row['id']
-    #   print firstRowId
-
-    # standingsList1
     pairingsList = []
 
     player1 = True # are we considering player1 or player2?
