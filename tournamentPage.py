@@ -49,7 +49,8 @@ th{
   <div class = "section-box">
     <h2>List of registered players</h2>
     <table>
-    
+    <tr><th>ID</th><th>Name</th></tr>
+    %s
     </table>
   </div>
 </div>
@@ -91,7 +92,9 @@ def View(env, resp):
     # send results
     headers = [('Content-type', 'text/html')]
     resp('200 OK', headers)
-    return [HTML_WRAP % ''.join(STANDING % q for q in standings)] #PLAYER % p for p in players, 
+    return [HTML_WRAP % (''.join(PLAYER % p for p in players),''.join(STANDING % q for q in standings))] #PLAYER % p for p in players, 
+    # The syntax s.join( seq ) where s='-'; and seq = ("a", "b", "c"); would return a-b-c
+    # for q in standings is producing a sequence of rows from standings. STANDING % q is subbing each q into the template string STANDING
 
 ## Request handler for posting - inserts to database
 # def Post(env, resp):
