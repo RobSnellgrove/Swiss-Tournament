@@ -51,6 +51,7 @@ def getSwissPairings():
         playerTwoName = row['name']
         thisTuple = ({'playerOneId':playerOneId,'playerOneName':playerOneName,'playerTwoId':playerTwoId,'playerTwoName':playerTwoName})
         pairingsList.append(thisTuple)
+        player1 = True
     return pairingsList
 
 
