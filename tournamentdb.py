@@ -20,7 +20,7 @@ def GetAllPlayers():
     ## Database connection
     db = psycopg2.connect("dbname=tournament")
     c = db.cursor();
-    c.execute("select * from players")
+    c.execute("select * from players order by id")
     players = ({'id': str(row[0]), 'name': str(row[1])}
       for row in c.fetchall())
     db.close()
