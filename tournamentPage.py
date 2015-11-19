@@ -51,7 +51,10 @@ table, th, td{
   <div class = "section-box">
     <h2>Register new player</h2>
     <p>
-    <input type = "text"/><input type = "button" value = "Register"/>
+    <form method=post action="/post">
+      <div><textarea id="content" name="content"></textarea></div>
+      <div><button id="go" type="submit">Register</button></div>
+    </form>
   </div>
   <div class = "section-box">
     <h2>List of registered players</h2>
@@ -117,35 +120,35 @@ def View(env, resp):
     # The syntax s.join( seq ) where s='-'; and seq = ("a", "b", "c"); would return a-b-c
     # for q in standings is producing a sequence of rows from standings. STANDING % q is subbing each q into the template string STANDING
 
-## Request handler for posting - inserts to database
-# def Post(env, resp):
-#     '''Post handles a submission of the forum's form.
+# Request handler for posting - inserts to database
+def Post(env, resp):
+    '''Post handles a submission of the forum's form.
   
-#     The message the user posted is saved in the database, then it sends a 302
-#     Redirect back to the main page so the user can see their new post.
-#     '''
-#     # Get post content
-#     input = env['wsgi.input']
-#     length = int(env.get('CONTENT_LENGTH', 0))
-#     # If length is zero, post is empty - don't save it.
-#     if length > 0:
-#         postdata = input.read(length)
-#         fields = cgi.parse_qs(postdata)
-#         content = fields['content'][0]
-#         # If the post is just whitespace, don't save it.
-#         content = content.strip()
-#         if content:
-#             # Save it in the database
-#             tournamentdb.AddPost(content)
-#     # 302 redirect back to the main page
-#     headers = [('Location', '/'),
-#                ('Content-type', 'text/plain')]
-#     resp('302 REDIRECT', headers) 
-#     return ['Redirecting']
+    The message the user posted is saved in the database, then it sends a 302
+    Redirect back to the main page so the user can see their new post.
+    '''
+    # Get post content
+    input = env['wsgi.input']
+    length = int(env.get('CONTENT_LENGTH', 0))
+    # If length is zero, post is empty - don't save it.
+    if length > 0:
+        postdata = input.read(length)
+        fields = cgi.parse_qs(postdata)
+        content = fields['content'][0]
+        # If the post is just whitespace, don't save it.
+        content = content.strip()
+        if content:
+            # Save it in the database
+            tournamentdb.registerPlayer(content)
+    # 302 redirect back to the main page
+    headers = [('Location', '/'),
+               ('Content-type', 'text/plain')]
+    resp('302 REDIRECT', headers) 
+    return ['Redirecting']
 
 ## Dispatch table - maps URL prefixes to request handlers
 DISPATCH = {'': View,
-            # 'post': Post,
+            'post': Post,
 	    }
 
 ## Dispatcher forwards requests according to the DISPATCH table.

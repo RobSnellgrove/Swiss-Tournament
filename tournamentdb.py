@@ -57,15 +57,15 @@ def getSwissPairings():
 
 
 
-## Add a post to the database.
-# def AddPost(content):
-#     '''Add a new post to the database.
+# Add a post to the database.
+def registerPlayer(name):
+    '''Add a new post to the database.
 
-#     Args:
-#       content: The text content of the new post.
-#     '''
-#     db = psycopg2.connect("dbname=forum")
-#     c = db.cursor();
-#     c.execute("INSERT INTO posts (content) VALUES (%s)", (content,))
-#     db.commit()
-#     db.close()
+    Args:
+      content: The text content of the new post.
+    '''
+    db = psycopg2.connect("dbname=tournament")
+    c = db.cursor();
+    c.execute("INSERT INTO players (name) VALUES (%s)", (name,))
+    db.commit()
+    db.close()
