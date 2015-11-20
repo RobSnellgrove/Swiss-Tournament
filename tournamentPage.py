@@ -54,10 +54,11 @@ table, th, td{
   <div class = "section-box">
     <h2>Register new player</h2>
     <form method=post action="/post">
-      <div><input type = "text" id="content" name="newPlayer"></textarea><button id="go" type="submit">Register</button></div>
+      <div><input type = "text" id="content" name="newPlayer"><button id="go" type="submit">Register</button></div>
     </form>
     <form method=post action="/delete">
-      <div><select id="playersToDelete" name="playersToDelete"><option selected>-- Choose player to delete --</option>**playersToDelete**</select><button id="delete" type="submit">Delete</button></div>
+      <div><select id="playersToDelete" name="playersToDelete">
+      <option selected>-- Choose player to delete --</option>*playersToDelete**</select><button id="delete" type="submit">Delete</button></div>
     </form>
     </div>
   <div class = "section-box">
@@ -70,18 +71,21 @@ table, th, td{
 </div>
 <div class = "row-div">
   <div class = "section-box">
-    <h2>Next round</h2>
+    <h2>Games left this round</h2>
+    <!--<form method = post action="/submitresult>" -->
     <table>
     <tr><th colspan="3">Player 1</th><th colspan="3">Player 2</th></tr>
     <tr><th>ID</th><th>Name</th><th>Won?</th><th>ID</th><th>Name</th><th>Won?</th></tr>
     **pairings**
     </table>
+    <br><button id="submitResults" type="submit">Submit results</button>
+    <!--</form>-->
   </div>
   <div class = "section-box">
     <h2>Current rankings</h2>
     <table>
     <tr><th>ID</th><th>Name</th><th>Wins</th><th>Losses</th><th>Played</th></tr>
-    **standings**
+**standings**
     </table>
   </div>
 </div>
@@ -92,9 +96,7 @@ table, th, td{
 
 # HTML template for an individual comment
 DROPDOWN = '''\
-
-  <option value="%(id)s">%(id)s | %(name)s</option>
-
+      <option value="%(id)s">%(id)s | %(name)s</option>
 '''
 
 PLAYER = '''\
