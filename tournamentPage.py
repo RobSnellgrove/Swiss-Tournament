@@ -128,7 +128,7 @@ def View(env, resp):
     players = tournamentdb.GetAllPlayers()
     deletePlayersList = tournamentdb.GetAllPlayers()
     pairings = tournamentdb.getSwissPairings()
-    standings = tournamentdb.getStandingsWithFewestPlayed()
+    standings = tournamentdb.getStandings()
     # send results
     headers = [('Content-type', 'text/html')]
     resp('200 OK', headers)

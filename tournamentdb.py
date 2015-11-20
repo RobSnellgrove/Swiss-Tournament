@@ -36,8 +36,18 @@ def getStandings():
     db.close()
     return standings
 
+def getStandingsWithFewestPlayed():
+    db = psycopg2.connect("dbname=tournament")
+    c = db.cursor()
+    c.execute("select * from winLossPlayed where no_of_Matches = (select min(no_of_Matches) from winLossPlayed);");
+    standingsWFP = [];
+    standingsWFP = ({'id': str(row[0]), 'name': str(row[1]), 'wins':str(row[2]), 'losses':str(row[3]), 'matches':str(row[4])}
+      for row in c.fetchall())
+    db.close()
+    return standingsWFP  
+
 def getSwissPairings():
-    standingsList = getStandings()
+    standingsList = getStandingsWithFewestPlayed()
     pairingsList = []
 
     player1 = True # are we considering player1 or player2?
@@ -70,7 +80,7 @@ def reportMatch(winner, loser):
       loser:  the id number of the player who lost
     """
  
-    db = connect()
+    db = psycopg2.connect("dbname=tournament")
     c = db.cursor()
     c.execute("insert into matches (winner, loser) values (%s,%s)",(winner,loser))
     db.commit()
@@ -90,3 +100,13 @@ def registerPlayer(name):
     c.execute("INSERT INTO players (name) VALUES (%s)", (name,))
     db.commit()
     db.close()
+
+# Add view for winLossPlayed table
+def createWinLossPlayed():
+    db = psycopg2.connect("dbname=tournament")
+    c = db.cursor();
+    c.execute("create view winLossPlayed as select losses.lossesID as id, name, wins.noOfWins as wins, losses.noOfLosses as losses, wins.noOfWins+losses.noOfLosses as no_of_Matchesfrom losses, wins, players where losses.lossesID = wins.winsID and players.id = losses.lossesID order by wins desc;")
+    db.commit()
+    db.close()
+
+    
