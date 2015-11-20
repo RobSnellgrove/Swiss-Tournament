@@ -161,10 +161,18 @@ def Post(env, resp):
 # Request handler for deleting - inserts to database
 def Delete(env, resp):
     # Get post content
-    form=cgi.FieldStorage()
-
-    toDeleteID=form['playersToDelete'].value
-    tournamentdb.deletePlayer(toDeleteID)
+    input = env['wsgi.input']
+    length = int(env.get('CONTENT_LENGTH', 0))
+    # If length is zero, post is empty - don't save it.
+    if length > 0:
+        postdata = input.read(length)
+        fields = cgi.parse_qs(postdata)
+        content = fields['playersToDelete'][0]
+        # If the post is just whitespace, don't save it.
+        content = content.strip()
+        if content:
+            # Save it in the database
+            tournamentdb.deletePlayer(content)
     # 302 redirect back to the main page
     headers = [('Location', '/'),
                ('Content-type', 'text/plain')]
