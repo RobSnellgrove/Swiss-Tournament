@@ -72,8 +72,8 @@ table, th, td{
   <div class = "section-box">
     <h2>Next round</h2>
     <table>
-    <tr><th colspan="2">Player 1</th><th colspan="2">Player 2</th><th colspan="2">Winner</th></tr>
-    <tr><th>ID</th><th>Name</th><th>ID</th><th>Name</th><th></th><th></th></tr>
+    <tr><th colspan="3">Player 1</th><th colspan="3">Player 2</th></tr>
+    <tr><th>ID</th><th>Name</th><th>Won?</th><th>ID</th><th>Name</th><th>Won?</th></tr>
     **pairings**
     </table>
   </div>
@@ -91,7 +91,7 @@ table, th, td{
 '''
 
 # HTML template for an individual comment
-DROPDOWN = '''/
+DROPDOWN = '''\
 
   <option value="%(id)s">%(id)s | %(name)s</option>
 
@@ -102,7 +102,14 @@ PLAYER = '''\
 '''
 
 PAIRING = '''\
-    <tr><td>%(playerOneId)s</td><td>%(playerOneName)s</td><td>%(playerTwoId)s</td><td>%(playerTwoName)s</td><td><button formaction="tournamentdb.reportMatch(%(playerOneId)s,%(playerTwoId)s)" type="submit">Player1</button></tr>
+    <tr>
+      <td>%(playerOneId)s</td>
+      <td>%(playerOneName)s</td>
+      <td><input type = "radio" name = "match%(playerOneId)s-%(playerTwoId)s" value = "%(playerOneId)s-%(playerTwoId)s"></td>
+      <td>%(playerTwoId)s</td>
+      <td>%(playerTwoName)s</td>
+      <td><input type = "radio" name = "match%(playerOneId)s-%(playerTwoId)s" value = "%(playerTwoId)s-%(playerOneId)s"></td>
+    </tr>
 '''
 
 STANDING = '''\
