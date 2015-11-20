@@ -188,10 +188,40 @@ def Delete(env, resp):
     resp('302 REDIRECT', headers) 
     return ['Redirecting']
 
+# Request handler for registering winners - inserts to database
+def SubmitResult(env, resp):
+    '''Post handles a submission of the forum's form.
+  
+    The message the user posted is saved in the database, then it sends a 302
+    Redirect back to the main page so the user can see their new post.
+    '''
+    # Get post content
+    input = env['wsgi.input']
+    length = int(env.get('CONTENT_LENGTH', 0))
+    # If length is zero, post is empty - don't save it.
+    if length > 0:
+        postdata = input.read(length)
+        fields = cgi.parse_qs(postdata)
+        outputString = ''
+        for each in fields:
+          fullResultString = fields[each][0]
+          dashPosn = fullResultString.find('-')
+          winnerID = fullResultString[:dashPosn]
+          loserID = fullResultString[dashPosn+1:]
+          outputString += "WinnerID: " + winnerID + "; LoserID: " + loserID + "<br>"
+          tournamentdb.reportMatch(winnerID,loserID)
+        # If the post is just whitespace, don't save it.
+    # Print out the winners
+    headers = [('Location','/'),
+               ('Content-type', 'text/plain')]
+    resp('302 REDIRECT', headers) 
+    return  ['Redirecting']
+
 ## Dispatch table - maps URL prefixes to request handlers
 DISPATCH = {'': View,
             'post': Post,
             'delete': Delete,
+            'submitresult': SubmitResult,
 	    }
 
 ## Dispatcher forwards requests according to the DISPATCH table.
