@@ -4,4 +4,5 @@ import tournamentdb
 #print "Hello %s, I want to say " % "You" # This line works
 #print "Hello %s, I want to say %s" % ("You", "goodbye")
 
-print tournamentdb.getSwissPairings()
+# print tournamentdb.getSwissPairings()
+tournamentdb.deletePlayer(68)

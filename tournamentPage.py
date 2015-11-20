@@ -7,6 +7,8 @@ import tournamentdb
 
 # Other modules used to run a web server.
 import cgi
+import cgitb
+cgitb.enable()
 from wsgiref.simple_server import make_server
 from wsgiref import util
 
@@ -51,12 +53,13 @@ table, th, td{
   <div class = "row-div">
   <div class = "section-box">
     <h2>Register new player</h2>
-    <p>
     <form method=post action="/post">
-      <div><input type = "text" id="content" name="newPlayer"></textarea></div>
-      <div><button id="go" type="submit">Register</button></div>
+      <div><input type = "text" id="content" name="newPlayer"></textarea><button id="go" type="submit">Register</button></div>
     </form>
-  </div>
+    <form method=post action="/delete">
+      <div><select id="playersToDelete" name="playersToDelete"><option selected>-- Choose player to delete --</option>**playersToDelete**</select><button id="delete" type="submit">Delete</button></div>
+    </form>
+    </div>
   <div class = "section-box">
     <h2>List of registered players</h2>
     <table>
@@ -88,6 +91,12 @@ table, th, td{
 '''
 
 # HTML template for an individual comment
+DROPDOWN = '''/
+
+  <option value="%(id)s">%(id)s | %(name)s</option>
+
+'''
+
 PLAYER = '''\
     <tr><td>%(id)s</td><td>%(name)s</td></tr>
 '''
@@ -108,20 +117,22 @@ def View(env, resp):
     '''
     # get posts from database
     players = tournamentdb.GetAllPlayers()
+    deletePlayersList = tournamentdb.GetAllPlayers()
     pairings = tournamentdb.getSwissPairings()
     standings = tournamentdb.getStandings()
     # send results
     headers = [('Content-type', 'text/html')]
     resp('200 OK', headers)
+    deleteString = ''.join(DROPDOWN % p for p in deletePlayersList)
     playerString = ''.join(PLAYER % p for p in players)
     pairingString = ''.join(PAIRING % q for q in pairings)
     standingString = ''.join(STANDING % p for p in standings)
-    newHTML = HTML_WRAP.replace('**players**', playerString).replace('**standings**',standingString).replace('**pairings**',pairingString)
+    newHTML = HTML_WRAP.replace('**playersToDelete**',deleteString).replace('**players**', playerString).replace('**standings**',standingString).replace('**pairings**',pairingString)
     return newHTML
     # The syntax s.join( seq ) where s='-'; and seq = ("a", "b", "c"); would return a-b-c
     # for q in standings is producing a sequence of rows from standings. STANDING % q is subbing each q into the template string STANDING
 
-# Request handler for posting - inserts to database
+# Request handler for registering players - inserts to database
 def Post(env, resp):
     '''Post handles a submission of the forum's form.
   
@@ -147,9 +158,23 @@ def Post(env, resp):
     resp('302 REDIRECT', headers) 
     return ['Redirecting']
 
+# Request handler for deleting - inserts to database
+def Delete(env, resp):
+    # Get post content
+    form=cgi.FieldStorage()
+
+    toDeleteID=form['playersToDelete'].value
+    tournamentdb.deletePlayer(toDeleteID)
+    # 302 redirect back to the main page
+    headers = [('Location', '/'),
+               ('Content-type', 'text/plain')]
+    resp('302 REDIRECT', headers) 
+    return ['Redirecting']
+
 ## Dispatch table - maps URL prefixes to request handlers
 DISPATCH = {'': View,
             'post': Post,
+            'delete': Delete,
 	    }
 
 ## Dispatcher forwards requests according to the DISPATCH table.

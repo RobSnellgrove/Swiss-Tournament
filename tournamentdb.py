@@ -54,6 +54,14 @@ def getSwissPairings():
         player1 = True # Set back to player1
     return pairingsList #return the list
 
+def deletePlayer(id):
+    """Remove all the player records from the database."""
+    db = psycopg2.connect("dbname=tournament")
+    c = db.cursor()
+    c.execute('delete from players where id = %s',(str(id),))
+    db.commit()
+    db.close()
+
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
 
@@ -66,7 +74,7 @@ def reportMatch(winner, loser):
     c = db.cursor()
     c.execute("insert into matches (winner, loser) values (%s,%s)",(winner,loser))
     db.commit()
-    db.close()
+    db.close()  
 
 
 
