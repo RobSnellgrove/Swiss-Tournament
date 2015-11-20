@@ -52,13 +52,19 @@ table, th, td{
   <h1>Swiss Tournament</h1>
   <div class = "row-div">
   <div class = "section-box">
-    <h2>Register new player</h2>
+    <h2>Add and remove players</h2>
     <form method=post action="/post">
       <div><input type = "text" id="content" name="newPlayer"><button id="go" type="submit">Register</button></div>
     </form>
     <form method=post action="/delete">
       <div><select id="playersToDelete" name="playersToDelete">
       <option disabled selected>-- Choose player to delete --</option>**playersToDelete**</select><button id="delete" type="submit">Delete</button></div>
+    </form><br>
+    <form method=post action="/deleteallplayers">
+      <button id="delete" type="submit">Delete All Players</button>
+    </form><br>
+    <form method=post action="/deleteallmatches">
+      <button id="delete" type="submit">Delete All Matches</button>
     </form>
     </div>
   <div class = "section-box">
