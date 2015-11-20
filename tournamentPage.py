@@ -72,14 +72,14 @@ table, th, td{
 <div class = "row-div">
   <div class = "section-box">
     <h2>Games left this round</h2>
-    <!--<form method = post action="/submitresult>" -->
+    <form method=post action="/submitresult">
     <table>
     <tr><th colspan="3">Player 1</th><th colspan="3">Player 2</th></tr>
     <tr><th>ID</th><th>Name</th><th>Won?</th><th>ID</th><th>Name</th><th>Won?</th></tr>
     **pairings**
     </table>
     <br><button id="submitResults" type="submit">Submit results</button>
-    <!--</form>-->
+    </form>
   </div>
   <div class = "section-box">
     <h2>Current rankings</h2>
