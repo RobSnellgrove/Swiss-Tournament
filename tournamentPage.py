@@ -58,7 +58,7 @@ table, th, td{
     </form>
     <form method=post action="/delete">
       <div><select id="playersToDelete" name="playersToDelete">
-      <option selected>-- Choose player to delete --</option>*playersToDelete**</select><button id="delete" type="submit">Delete</button></div>
+      <option disabled selected>-- Choose player to delete --</option>**playersToDelete**</select><button id="delete" type="submit">Delete</button></div>
     </form>
     </div>
   <div class = "section-box">
@@ -179,7 +179,7 @@ def Delete(env, resp):
         content = fields['playersToDelete'][0]
         # If the post is just whitespace, don't save it.
         content = content.strip()
-        if content:
+        if content and content:
             # Save it in the database
             tournamentdb.deletePlayer(content)
     # 302 redirect back to the main page
