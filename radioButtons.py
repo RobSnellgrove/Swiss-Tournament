@@ -60,12 +60,8 @@ def SelectWinner(env, resp):
         postdata = input.read(length)
         fields = cgi.parse_qs(postdata)
         outputString = ''
-        if 'match1' in fields:
-          match1winner = fields['match1'][0]
-          outputString += 'Match 1 winner: ' + match1winner + '<br>'
-        if 'match2' in fields:
-          match2winner = fields['match2'][0]
-          outputString += 'Match 2 winner: ' + match2winner + '<br>'
+        for each in fields:
+          outputString += fields[each][0] + '<br>'
         # If the post is just whitespace, don't save it.
     # Print out the winners
     headers = [('Content-type', 'text/html')]
