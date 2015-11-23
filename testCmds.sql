@@ -14,4 +14,5 @@
 -- 	players.id = losses.lossesID
 -- order by wins desc;
 
-select * from winLossPlayed where no_of_Matches = (select min(no_of_Matches) from winLossPlayed);
+-- select * from winLossPlayed where no_of_Matches = (select min(no_of_Matches) from winLossPlayed);
+select * from players;

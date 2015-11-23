@@ -26,6 +26,17 @@ def GetAllPlayers():
     db.close()
     return players
 
+def GetAllPlayersWithNoMatches():
+
+    ## Database connection
+    db = psycopg2.connect("dbname=tournament")
+    c = db.cursor();
+    c.execute("select * from winLossPlayed where no_of_matches = 0")
+    players = ({'id': str(row[0]), 'name': str(row[1])}
+      for row in c.fetchall())
+    db.close()
+    return players
+
 def getStandings():
     db = psycopg2.connect("dbname=tournament")
     c = db.cursor()
@@ -69,6 +80,22 @@ def deletePlayer(id):
     db = psycopg2.connect("dbname=tournament")
     c = db.cursor()
     c.execute('delete from players where id = %s',(str(id),))
+    db.commit()
+    db.close()
+
+def deleteAllPlayers():
+    db = psycopg2.connect("dbname=tournament")
+    c = db.cursor()
+    c.execute('delete from matches') # delete matches to remove foreign key dependencies
+    c.execute('delete from players')
+    db.commit()
+    db.close()
+
+def deleteAllMatches():
+    """Remove all the match records from the database."""
+    db = psycopg2.connect("dbname=tournament")
+    c = db.cursor()
+    c.execute('delete from matches')
     db.commit()
     db.close()
 

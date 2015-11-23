@@ -22,10 +22,22 @@ HTML_WRAP = '''\
 <style type = "text/css">
 .row-div{
   padding: 10px;
+  width: 80%;
+  margin: auto;
 }
 
 th{
   text-align: left;
+}
+
+h1{
+  font-family:arial;
+  text-align:center;
+}
+
+container{
+  width: 60%;
+  margin: auto;
 }
 
 table, th, td{
@@ -49,50 +61,52 @@ table, th, td{
 </head>
 
 <body>
+<div class = "container">
   <h1>Swiss Tournament</h1>
   <div class = "row-div">
-  <div class = "section-box">
-    <h2>Add and remove players</h2>
-    <form method=post action="/post">
-      <div><input type = "text" id="content" name="newPlayer"><button id="go" type="submit">Register</button></div>
-    </form>
-    <form method=post action="/delete">
-      <div><select id="playersToDelete" name="playersToDelete">
-      <option disabled selected>-- Choose player to delete --</option>**playersToDelete**</select><button id="delete" type="submit">Delete</button></div>
-    </form><br>
-    <form method=post action="/deleteallplayers">
-      <button id="delete" type="submit">Delete All Players</button>
-    </form><br>
-    <form method=post action="/deleteallmatches">
-      <button id="delete" type="submit">Delete All Matches</button>
-    </form>
+    <div class = "section-box">
+      <h2>Add and remove players</h2>
+      <form method=post action="/post">
+        <div><input type = "text" id="content" name="newPlayer" autofocus><button id="go" type="submit">Register</button></div>
+      </form>
+      <form method=post action="/delete">
+        <div><select id="playersToDelete" name="playersToDelete">
+        <option disabled selected>-- Choose player to delete --</option>**playersToDelete**</select><button id="delete" type="submit">Delete</button></div>
+      </form><br>
+      <form method=post action="/deleteallplayers">
+        <button id="delete" type="submit">Delete All Players</button>
+      </form><br>
+      <form method=post action="/deleteallmatches">
+        <button id="delete" type="submit">Delete All Matches</button>
+      </form>
     </div>
-  <div class = "section-box">
-    <h2>List of registered players</h2>
-    <table>
-    <tr><th>ID</th><th>Name</th></tr>
-    **players**
-    </table>
+    <div class = "section-box">
+      <h2>List of registered players</h2>
+      <table>
+      <tr><th>ID</th><th>Name</th></tr>
+      **players**
+      </table>
+    </div>
   </div>
-</div>
-<div class = "row-div">
-  <div class = "section-box">
-    <h2>Games left this round</h2>
-    <form method=post action="/submitresult">
-    <table>
-    <tr><th colspan="3">Player 1</th><th colspan="3">Player 2</th></tr>
-    <tr><th>ID</th><th>Name</th><th>Won?</th><th>ID</th><th>Name</th><th>Won?</th></tr>
-    **pairings**
-    </table>
-    <br><button id="submitResults" type="submit">Submit results</button>
-    </form>
-  </div>
-  <div class = "section-box">
-    <h2>Current rankings</h2>
-    <table>
-    <tr><th>ID</th><th>Name</th><th>Wins</th><th>Losses</th><th>Played</th></tr>
-**standings**
-    </table>
+  <div class = "row-div">
+    <div class = "section-box">
+      <h2>Games left this round</h2>
+      <form method=post action="/submitresult">
+      <table>
+      <tr><th colspan="3">Player 1</th><th colspan="3">Player 2</th></tr>
+      <tr><th>ID</th><th>Name</th><th>Won?</th><th>ID</th><th>Name</th><th>Won?</th></tr>
+      **pairings**
+      </table>
+      <br><button id="submitResults" type="submit">Submit results</button>
+      </form>
+    </div>
+    <div class = "section-box">
+      <h2>Current rankings</h2>
+      <table>
+      <tr><th>ID</th><th>Name</th><th>Wins</th><th>Losses</th><th>Played</th></tr>
+  **standings**
+      </table>
+    </div>
   </div>
 </div>
 </body>
@@ -132,7 +146,7 @@ def View(env, resp):
     '''
     # get posts from database
     players = tournamentdb.GetAllPlayers()
-    deletePlayersList = tournamentdb.GetAllPlayers()
+    deletePlayersList = tournamentdb.GetAllPlayersWithNoMatches()
     pairings = tournamentdb.getSwissPairings()
     standings = tournamentdb.getStandings()
     # send results
@@ -223,10 +237,28 @@ def SubmitResult(env, resp):
     resp('302 REDIRECT', headers) 
     return  ['Redirecting']
 
+def deleteAllPlayers(env,resp):
+    """Remove all the player records from the database."""
+    tournamentdb.deleteAllPlayers()
+    headers = [('Location','/'),
+               ('Content-type', 'text/plain')]
+    resp('302 REDIRECT', headers) 
+    return  ['Redirecting']
+
+def deleteAllMatches(env,resp):
+    """Remove all the match records from the database."""
+    tournamentdb.deleteAllMatches()
+    headers = [('Location','/'),
+               ('Content-type', 'text/plain')]
+    resp('302 REDIRECT', headers) 
+    return  ['Redirecting']
+
 ## Dispatch table - maps URL prefixes to request handlers
 DISPATCH = {'': View,
             'post': Post,
             'delete': Delete,
+            'deleteallmatches': deleteAllMatches,
+            'deleteallplayers': deleteAllPlayers,
             'submitresult': SubmitResult,
 	    }
 
