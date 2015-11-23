@@ -1,6 +1,0 @@
-- remove players using a drop-down menu
-	- handle exception for when player is in a match
-	- delete all players and reset tournament
-- select the winner or loser for a particular round
-	- when the winner is selected, remove that pairing from the list for this round (only output players with the min number of 'played' in the output list)
-
